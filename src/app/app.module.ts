@@ -20,6 +20,8 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
+import { COMPANIES_COMPANY_ROUTE_PROVIDER } from './companies/company/providers/company-route.provider';
+import { CUSTOMERS_CUSTOMER_ROUTE_PROVIDER } from './customers/customer/providers/customer-route.provider';
 
 @NgModule({
   declarations: [AppComponent],
@@ -53,7 +55,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     CommercialUiConfigModule.forRoot(),
     NgxsModule.forRoot([]),
   ],
-  providers: [APP_ROUTE_PROVIDER],
+  providers: [APP_ROUTE_PROVIDER, COMPANIES_COMPANY_ROUTE_PROVIDER, CUSTOMERS_CUSTOMER_ROUTE_PROVIDER],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,499 @@
+<abp-page [title]="'::customers' | abpLocalization">
+  <abp-page-toolbar-container class="col">
+    <div class="text-lg-right pt-2">
+      <button
+        *abpPermission="'AbpAngular.customers.Create'"
+        class="btn btn-primary btn-sm"
+        type="button"
+        (click)="create()"
+      >
+        <i class="fa fa-plus mr-1" aria-hidden="true"></i>
+        {{ '::Newcustomer' | abpLocalization }}
+      </button>
+    </div>
+  </abp-page-toolbar-container>
+
+  <p>
+    <a
+      href="javascript:;"
+      (click)="isFiltersHidden = !isFiltersHidden"
+      [attr.aria-expanded]="!isFiltersHidden"
+      aria-controls="advanced-content-filters"
+    >
+      {{ '::SeeAdvancedFilters' | abpLocalization }}
+      <i [ngbCollapse]="!isFiltersHidden" class="fa fa-angle-down ml-1" aria-hidden="true"></i>
+      <i [ngbCollapse]="isFiltersHidden" class="fa fa-angle-up ml-1" aria-hidden="true"></i>
+    </a>
+  </p>
+
+  <div id="advanced-content-filters" [ngbCollapse]="isFiltersHidden">
+    <div class="card mb-4">
+      <div class="card-body">
+        <form #filterForm (keyup.enter)="list.get()">
+          <div class="row">
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="licenseNoFilter">
+                  {{ '::LicenseNo' | abpLocalization }}
+                </label>
+
+                <input
+                  id="licenseNoFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.licenseNo"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="minLicenseExpired">
+                    {{ '::MinLicenseExpired' | abpLocalization }}
+                </label>
+
+                <div class="input-group" validationTarget>
+                  <input
+                    id="minLicenseExpired"
+                    class="form-control"
+                    #minLicenseExpiredInput
+                    #minLicenseExpiredDatepicker="ngbDatepicker"
+                    name="minLicenseExpired"
+                    ngbDatepicker
+                    readonly
+                    (click)="minLicenseExpiredDatepicker.toggle()"
+                    (keyup.space)="minLicenseExpiredDatepicker.toggle()"
+                    [(ngModel)]="filters.licenseExpiredMin"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <div *ngIf="minLicenseExpiredInput.value" class="input-group-append">
+                    <button
+                      class="btn btn-link px-2"
+                      type="button"
+                      [title]="'AbpUi::Clear' | abpLocalization"
+                      (click)="minLicenseExpiredDatepicker.writeValue(null); minLicenseExpiredDatepicker.manualDateChange(null, true)"
+                    >
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="maxLicenseExpired">
+                  {{ '::MaxLicenseExpired' | abpLocalization }}
+                </label>
+
+                <div class="input-group" validationTarget>
+                  <input
+                    id="maxLicenseExpired"
+                    class="form-control"
+                    #maxLicenseExpiredInput
+                    #maxLicenseExpiredDatepicker="ngbDatepicker"
+                    name="maxLicenseExpired"
+                    ngbDatepicker
+                    readonly
+                    (click)="maxLicenseExpiredDatepicker.toggle()"
+                    (keyup.space)="maxLicenseExpiredDatepicker.toggle()"
+                    [(ngModel)]="filters.licenseExpiredMax"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <div *ngIf="maxLicenseExpiredInput.value" class="input-group-append">
+                    <button
+                      class="btn btn-link px-2"
+                      type="button"
+                      [title]="'AbpUi::Clear' | abpLocalization"
+                      (click)="maxLicenseExpiredDatepicker.writeValue(null); maxLicenseExpiredDatepicker.manualDateChange(null, true)"
+                    >
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="addressFilter">
+                  {{ '::Address' | abpLocalization }}
+                </label>
+
+                <input
+                  id="addressFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.address"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="cityFilter">
+                  {{ '::City' | abpLocalization }}
+                </label>
+
+                <input
+                  id="cityFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.city"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="zipCodeFilter">
+                  {{ '::ZipCode' | abpLocalization }}
+                </label>
+
+                <input
+                  id="zipCodeFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.zipCode"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="countryFilter">
+                  {{ '::Country' | abpLocalization }}
+                </label>
+
+                <input
+                  id="countryFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.country"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="emailFilter">
+                  {{ '::Email' | abpLocalization }}
+                </label>
+
+                <input
+                  id="emailFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.email"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="websiteFilter">
+                  {{ '::Website' | abpLocalization }}
+                </label>
+
+                <input
+                  id="websiteFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.website"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <div class="form-group">
+                <label for="telephoneFilter">
+                  {{ '::Telephone' | abpLocalization }}
+                </label>
+
+                <input
+                  id="telephoneFilter"
+                  class="form-control"
+                  [(ngModel)]="filters.telephone"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-auto align-self-end mb-3">
+              <div class="row">
+                <div class="col-6 col-sm-auto">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-block"
+                    (click)="clearFilters()"
+                  >
+                    <span>{{ 'AbpUi::Clear' | abpLocalization }}</span>
+                  </button>
+                </div>
+                <div class="col-6 col-sm-auto">
+                  <button type="button" class="btn btn-primary btn-block" (click)="list.get()">
+                    <span>{{ 'AbpUi::Refresh' | abpLocalization }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="data-tables-filter">
+        <div class="input-group">
+          <input
+            type="search"
+            class="form-control"
+            [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
+            [(ngModel)]="list.filter"
+          />
+          <div class="input-group-append">
+            <button
+              [title]="'AbpUi::Search' | abpLocalization"
+              (click)="list.get()"
+              class="btn btn-sm btn-primary"
+            >
+              <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ngx-datatable [rows]="data.items" [count]="data.totalCount" [list]="list" default>
+        <ngx-datatable-column
+          [name]="'AbpUi::Actions' | abpLocalization"
+          [maxWidth]="150"
+          [width]="150"
+          [sortable]="false"
+        >
+          <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
+            <div ngbDropdown container="body" class="d-inline-block">
+              <button
+                class="btn btn-primary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                ngbDropdownToggle
+              >
+                <i class="fa fa-cog mr-1" aria-hidden="true"></i>
+                {{ 'AbpUi::Actions' | abpLocalization }}
+              </button>
+
+              <div ngbDropdownMenu>
+                <button
+                  ngbDropdownItem
+                  *abpPermission="'AbpAngular.customers.Edit'"
+                  (click)="update(row)"
+                >
+                  {{ 'AbpUi::Edit' | abpLocalization }}
+                </button>
+
+                <button
+                  ngbDropdownItem
+                  *abpPermission="'AbpAngular.customers.Delete'"
+                  (click)="delete(row)"
+                >
+                  {{ 'AbpUi::Delete' | abpLocalization }}
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::LicenseNo' | abpLocalization }}" prop="licenseNo">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.licenseNo }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::LicenseExpired' | abpLocalization }}" prop="licenseExpired">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.licenseExpired | date }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Address' | abpLocalization }}" prop="address">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.address }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::City' | abpLocalization }}" prop="city">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.city }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::ZipCode' | abpLocalization }}" prop="zipCode">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.zipCode }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Country' | abpLocalization }}" prop="country">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.country }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Email' | abpLocalization }}" prop="email">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.email }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Website' | abpLocalization }}" prop="website">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.website }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Telephone' | abpLocalization }}" prop="telephone">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.telephone }}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</abp-page>
+
+<abp-modal [busy]="isModalBusy" [(visible)]="isModalOpen">
+  <ng-template #abpHeader>
+    <h3>
+      {{ (selected ? 'AbpUi::Edit' : '::Newcustomer') | abpLocalization }}
+    </h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" validateOnSubmit>
+      <div class="mt-2 fade-in-top">
+        <div class="form-group">
+          <label for="customer-license-no">
+            {{ '::LicenseNo' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-license-no"
+            formControlName="licenseNo"
+            class="form-control"
+            autofocus
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-license-expired">
+            {{ '::LicenseExpired' | abpLocalization }} 
+          </label>
+
+          <div class="input-group" validationTarget>
+            <input
+              readonly
+              id="customer-license-expired"
+              formControlName="licenseExpired"
+              class="form-control"
+              ngbDatepicker
+              #licenseExpiredInput
+              #licenseExpiredDatepicker="ngbDatepicker"
+              (click)="licenseExpiredDatepicker.open()"
+              (keyup.space)="licenseExpiredDatepicker.open()"
+            />
+            <div *ngIf="licenseExpiredInput.value" class="input-group-append">
+              <button
+                class="btn btn-link px-2"
+                type="button"
+                [title]="'AbpUi::Clear' | abpLocalization"
+                (click)="licenseExpiredDatepicker.writeValue(null); licenseExpiredDatepicker.manualDateChange(null, true)"
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="customer-address">
+            {{ '::Address' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-address"
+            formControlName="address"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-city">
+            {{ '::City' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-city"
+            formControlName="city"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-zip-code">
+            {{ '::ZipCode' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-zip-code"
+            formControlName="zipCode"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-country">
+            {{ '::Country' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-country"
+            formControlName="country"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-email">
+            {{ '::Email' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-email"
+            formControlName="email"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-website">
+            {{ '::Website' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-website"
+            formControlName="website"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-telephone">
+            {{ '::Telephone' | abpLocalization }} 
+          </label>
+
+          <input
+            id="customer-telephone"
+            formControlName="telephone"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ 'AbpUi::Cancel' | abpLocalization }}
+    </button>
+
+    <abp-button iconClass="fa fa-check" (click)="submitForm()" [disabled]="form?.invalid">
+      {{ 'AbpUi::Save' | abpLocalization }}
+    </abp-button>
+  </ng-template>
+</abp-modal>
