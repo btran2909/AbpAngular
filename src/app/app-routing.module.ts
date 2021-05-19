@@ -55,6 +55,7 @@ const routes: Routes = [
   },
   { path: 'companies', loadChildren: () => import('./companies/company/company.module').then(m => m.companyModule) },
   { path: 'customers', loadChildren: () => import('./customers/customer/customer.module').then(m => m.customerModule) },
+  { path: 'file-management', loadChildren: () => import('@volo/abp.ng.file-management').then(m => m.FileManagementModule.forLazy()), }
 ];
 
 @NgModule({

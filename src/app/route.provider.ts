@@ -23,6 +23,12 @@ function configureRoutes(routes: RoutesService) {
         layout: eLayoutType.application,
         requiredPolicy: 'AbpAngular.Dashboard.Host  || AbpAngular.Dashboard.Tenant',
       },
+      {
+        path: '/file-management',
+        name: 'FileManagement::Menu:FileManagement',
+        iconClass: 'fas fa-upload',
+        layout: eLayoutType.application
+      }
     ]);
   };
 }
